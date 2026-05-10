@@ -939,6 +939,49 @@
     .stat-row { grid-template-columns: repeat(2, 1fr); }
     footer { flex-direction: column; gap: 8px; text-align: center; }
   }
+  /* ── GALLERY ── */
+  .gcell img { display:block; }
+  .gcell:hover img { filter:grayscale(0%) !important; transform:scale(1.04); }
+  .gcap {
+    position:absolute; bottom:0; left:0; right:0;
+    background:linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%);
+    font-family:'DM Mono',monospace; font-size:0.55rem; letter-spacing:0.1em;
+    text-transform:uppercase; color:rgba(255,255,255,0.8);
+    padding:24px 10px 10px; opacity:0; transition:opacity 0.25s;
+  }
+  .gcell:hover .gcap { opacity:1; }
+
+  /* ── LIGHTBOX ── */
+  #lb-overlay {
+    display:none; position:fixed; inset:0; z-index:300;
+    background:rgba(0,0,0,0.94); align-items:center; justify-content:center;
+  }
+  #lb-overlay.open { display:flex; }
+  #lb-overlay img { max-width:88vw; max-height:86vh; object-fit:contain; display:block; }
+  #lb-close {
+    position:absolute; top:22px; right:28px;
+    font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:0.1em;
+    text-transform:uppercase; color:var(--text-dim); cursor:pointer; transition:color 0.2s;
+  }
+  #lb-close:hover { color:var(--white); }
+  #lb-cap {
+    position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
+    font-family:'DM Mono',monospace; font-size:0.58rem;
+    letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted);
+    white-space:nowrap;
+  }
+  .lb-nav-btn {
+    position:absolute; top:50%; transform:translateY(-50%);
+    background:transparent; border:none; font-size:1.4rem;
+    color:var(--text-dim); cursor:pointer; padding:16px; transition:color 0.2s;
+  }
+  .lb-nav-btn:hover { color:var(--white); }
+  #lb-prev { left:12px; }
+  #lb-next { right:12px; }
+
+  @media (max-width:800px) {
+    #g-play, #g-prize { grid-template-columns:repeat(2,1fr) !important; }
+  }
 </style>
 </head>
 <body>
@@ -966,7 +1009,7 @@
     <div class="hero-grid">
       <div class="hero-left">
         <div class="section-label">India · Chennai</div>
-        <h1>Harikrishnan<br>A Ra</h1>
+        <h1 style="white-space:nowrap; font-size:clamp(2rem,4.5vw,4.2rem);">Harikrishnan A Ra</h1>
         <div class="divider"></div>
         <p>Chess Grandmaster from Chennai, India, with nearly 20 years of experience in competitive chess and international tournament play. Pursuing a Master's in Innovation & Entrepreneurship at the University of Texas at Dallas under the university's chess scholarship program.</p>
         <p style="margin-top: 12px;">Strong interest in building ventures at the intersection of chess, performance, education, and innovation.</p>
@@ -1075,6 +1118,74 @@
     </div>
 
     <a href="https://ratings.fide.com/profile/5081483" target="_blank" class="btn">View FIDE Profile →</a>
+
+    <!-- Gallery -->
+    <div style="margin-top:52px;">
+      <div class="section-label" style="margin-bottom:18px;">Gallery</div>
+
+      <!-- Tab buttons -->
+      <div style="display:flex; gap:0; border:1px solid var(--border); margin-bottom:2px; width:fit-content;">
+        <button id="gtab-play" onclick="switchTab('play')" style="font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:9px 20px;cursor:pointer;border:none;background:var(--accent-dim);color:var(--accent);border-right:1px solid var(--border);transition:all 0.2s;">In Play</button>
+        <button id="gtab-prize" onclick="switchTab('prize')" style="font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:9px 20px;cursor:pointer;border:none;background:transparent;color:var(--text-dim);transition:all 0.2s;">Prize Moments</button>
+      </div>
+
+      <!-- Playing photos: 4 best shots -->
+      <div id="g-play" style="display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--border);border:1px solid var(--border);">
+        <div class="gcell" onclick="openLb(this)" data-cap="Outdoor tournament · In deep calculation" style="aspect-ratio:3/4;overflow:hidden;cursor:pointer;position:relative;">
+          <img src="play_01_outdoor_focus.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(15%);transition:filter .3s,transform .3s;display:block;">
+          <div class="gcap">Outdoor · In calculation</div>
+        </div>
+        <div class="gcell" onclick="openLb(this)" data-cap="Black & white · intense calculation" style="aspect-ratio:3/4;overflow:hidden;cursor:pointer;position:relative;">
+          <img src="play_08_bw_intense.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(15%);transition:filter .3s,transform .3s;display:block;">
+          <div class="gcap">Intense calculation · B&W</div>
+        </div>
+        <div class="gcell" onclick="openLb(this)" data-cap="Classical game — board close-up" style="aspect-ratio:3/4;overflow:hidden;cursor:pointer;position:relative;">
+          <img src="play_09_portrait_board.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(15%);transition:filter .3s,transform .3s;display:block;">
+          <div class="gcap">Ready to play</div>
+        </div>
+        <div class="gcell" onclick="openLb(this)" data-cap="Representing Team India" style="aspect-ratio:3/4;overflow:hidden;cursor:pointer;position:relative;">
+          <img src="play_04_world_team.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(15%);transition:filter .3s,transform .3s;display:block;">
+          <div class="gcap">Team India</div>
+        </div>
+      </div>
+
+      <!-- Prize photos: 8 curated shots -->
+      <div id="g-prize" style="display:none;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--border);border:1px solid var(--border);">
+        <div class="gcell" onclick="openLb(this)" data-cap="La Plagne 2025 · GM Norm · France" style="aspect-ratio:3/4;overflow:hidden;cursor:pointer;position:relative;">
+          <img src="img_05_laplagne.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(15%);transition:filter .3s,transform .3s;display:block;">
+          <div class="gcap">La Plagne · GM Norm</div>
+        </div>
+        <div class="gcell" onclick="openLb(this)" data-cap="3rd Cidade de Lagos Open · 1st Place · Portugal" style="aspect-ratio:3/4;overflow:hidden;cursor:pointer;position:relative;">
+          <img src="img_03_lagos.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(15%);transition:filter .3s,transform .3s;display:block;">
+          <div class="gcap">Lagos Open · Portugal</div>
+        </div>
+        <div class="gcell" onclick="openLb(this)" data-cap="Mikis Theodorakis Open · Greece 2024" style="aspect-ratio:3/4;overflow:hidden;cursor:pointer;position:relative;">
+          <img src="img_10_greece.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(15%);transition:filter .3s,transform .3s;display:block;">
+          <div class="gcap">Theodorakis Open · Greece</div>
+        </div>
+        <div class="gcell" onclick="openLb(this)" data-cap="Pafos Open · Cyprus" style="aspect-ratio:3/4;overflow:hidden;cursor:pointer;position:relative;">
+          <img src="img_01_trophy.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(15%);transition:filter .3s,transform .3s;display:block;">
+          <div class="gcap">Pafos Open · Cyprus</div>
+        </div>
+        <div class="gcell" onclick="openLb(this)" data-cap="Ljubljana Chess Festival · 2nd Place · Slovenia" style="aspect-ratio:3/4;overflow:hidden;cursor:pointer;position:relative;">
+          <img src="img_11_slovenia.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(15%);transition:filter .3s,transform .3s;display:block;">
+          <div class="gcap">Ljubljana Festival · Slovenia</div>
+        </div>
+        <div class="gcell" onclick="openLb(this)" data-cap="21st Pays de Charleroi Open · Belgium" style="aspect-ratio:3/4;overflow:hidden;cursor:pointer;position:relative;">
+          <img src="img_09_india_flag.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(15%);transition:filter .3s,transform .3s;display:block;">
+          <div class="gcap">Charleroi Open · Belgium</div>
+        </div>
+        <div class="gcell" onclick="openLb(this)" data-cap="All India Inter University · Winner 2025" style="aspect-ratio:3/4;overflow:hidden;cursor:pointer;position:relative;">
+          <img src="img_07_interzone.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(15%);transition:filter .3s,transform .3s;display:block;">
+          <div class="gcap">Inter University · Winner</div>
+        </div>
+        <div class="gcell" onclick="openLb(this)" data-cap="56th Biel International Festival · 1st GM Norm · Switzerland" style="aspect-ratio:3/4;overflow:hidden;cursor:pointer;position:relative;">
+          <img src="img_15_biel.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(15%);transition:filter .3s,transform .3s;display:block;">
+          <div class="gcap">Biel · 1st GM Norm</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1090,7 +1201,7 @@
         <p>With over 5 years of structured coaching experience and the highest FIDE Trainer title, I work with students at all levels — from developing players to serious competitors. My students have won national and international medals in age-category events.</p>
       </div>
       <div>
-        <p>I provide a structured training plan so you can make consistent progress between sessions. Coaching is available online and in-person, tailored individually or in small groups.</p>
+        <p>I provide a structured training plan so you can make consistent progress between sessions. Coaching is available online, tailored individually or in small groups.</p>
       </div>
     </div>
 
@@ -1162,16 +1273,16 @@
         <div class="t-year">2026 – Present</div>
         <h3>Master of Science — Innovation & Entrepreneurship</h3>
         <div class="t-sub">University of Texas at Dallas, USA</div>
-        <p style="font-size:0.85rem; margin-top:6px;">Focusing on venture building, design thinking, and innovation strategy. Admitted under the university's chess scholarship program.</p>
+        <p style="font-size:0.85rem; margin-top:6px;">Focusing on venture building and innovation strategy. Admitted under the university's chess scholarship program.</p>
       </div>
       <div class="timeline-item">
-        <div class="t-year">2022 – 2024</div>
+        <div class="t-year">2023 – 2025</div>
         <h3>Master of Commerce (M.Com)</h3>
         <div class="t-sub">SRM University, Chennai, India</div>
         <div class="t-grade">85%</div>
       </div>
       <div class="timeline-item">
-        <div class="t-year">2019 – 2022</div>
+        <div class="t-year">2020 – 2023</div>
         <h3>Bachelor of Commerce (B.Com)</h3>
         <div class="t-sub">SRM University, Chennai, India</div>
         <div class="t-grade">86.6%</div>
@@ -1230,9 +1341,17 @@
         </div>
         <div class="w-period">2021–2025</div>
       </div>
+      <div class="work-item">
+        <div>
+          <div class="w-role">Intern · Chess Business</div>
+          <h3>Time2Chess Private Limited</h3>
+          <p>Gained hands-on exposure to how a chess academy operates end-to-end — from student acquisition and coaching logistics to financial management, accounts, marketing strategy, and day-to-day operations. Developed a grounded understanding of the business side of chess education.</p>
+        </div>
+        <div class="w-period">Chennai</div>
+      </div>
     </div>
 
-    <p style="font-size:0.85rem; color:var(--text-dim); margin-top:8px;">More projects and entrepreneurship work in progress — currently building at the intersection of chess, education, and innovation at UTD.</p>
+    <p style="font-size:0.85rem; color:var(--text-dim); margin-top:8px;">More entrepreneurship projects currently in development at UTD — building at the intersection of chess, education, and innovation.</p>
   </div>
 </section>
 
@@ -1528,7 +1647,77 @@
       btn.style.color = 'var(--accent)';
     }, 3000);
   }
+  function switchGallery(name, btn) {
+    document.querySelectorAll('.photo-grid').forEach(g => g.classList.add('hidden'));
+    document.querySelectorAll('.gtab').forEach(t => t.classList.remove('active'));
+    document.getElementById('gallery-' + name).classList.remove('hidden');
+    btn.classList.add('active');
+  }
+
+  // Gallery tabs
+  function switchTab(name) {
+    const play = document.getElementById('g-play');
+    const prize = document.getElementById('g-prize');
+    const tPlay = document.getElementById('gtab-play');
+    const tPrize = document.getElementById('gtab-prize');
+    if (name === 'play') {
+      play.style.display = 'grid'; prize.style.display = 'none';
+      tPlay.style.background = 'var(--accent-dim)'; tPlay.style.color = 'var(--accent)';
+      tPrize.style.background = 'transparent'; tPrize.style.color = 'var(--text-dim)';
+    } else {
+      play.style.display = 'none'; prize.style.display = 'grid';
+      tPrize.style.background = 'var(--accent-dim)'; tPrize.style.color = 'var(--accent)';
+      tPlay.style.background = 'transparent'; tPlay.style.color = 'var(--text-dim)';
+    }
+  }
+
+  // Lightbox
+  let lbCells = [];
+  let lbIdx = 0;
+
+  function openLb(cell) {
+    const grid = cell.closest('#g-play, #g-prize');
+    lbCells = Array.from(grid.querySelectorAll('.gcell'));
+    lbIdx = lbCells.indexOf(cell);
+    showLb();
+    document.getElementById('lb-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function showLb() {
+    const c = lbCells[lbIdx];
+    document.getElementById('lb-img').src = c.querySelector('img').src;
+    document.getElementById('lb-cap').textContent = c.dataset.cap || '';
+  }
+
+  function lbNav(dir) {
+    lbIdx = (lbIdx + dir + lbCells.length) % lbCells.length;
+    showLb();
+  }
+
+  function closeLb(e) {
+    if (!e || e.target.id === 'lb-overlay' || e.target.id === 'lb-close') {
+      document.getElementById('lb-overlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lb-overlay').classList.contains('open')) return;
+    if (e.key === 'Escape') closeLb({ target: { id: 'lb-overlay' } });
+    if (e.key === 'ArrowLeft') lbNav(-1);
+    if (e.key === 'ArrowRight') lbNav(1);
+  });
 </script>
+
+<!-- Lightbox -->
+<div id="lb-overlay" onclick="closeLb(event)">
+  <button class="lb-nav-btn" id="lb-prev" onclick="lbNav(-1)">&#8592;</button>
+  <img id="lb-img" src="" alt="">
+  <button class="lb-nav-btn" id="lb-next" onclick="lbNav(1)">&#8594;</button>
+  <div id="lb-cap"></div>
+  <div id="lb-close" onclick="closeLb({target:{id:'lb-close'}})">Close ✕</div>
+</div>
 
 </body>
 </html>
